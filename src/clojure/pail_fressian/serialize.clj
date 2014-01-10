@@ -40,20 +40,14 @@
   it's not provided, the default deserializer will be used. The deserializer can be curried into a
   closure to reuse the same instance and reduce stress on the garbage collector.
 
-    (deserialize Name buffer)
-    (deserialize (deserializer) Name buffer)
+    (deserialize buffer)
+    (deserialize (deserializer) buffer)
 
     ; reuses deserializer for each object being deserialized
-    (def f (partial deserialize (deserializer) Name))
+    (def f (partial deserialize (deserializer)))
     (map f buffers)"
   ([buffer]
      (fress/read (bs/to-byte-buffer buffer)))
 
   ([deserializer buffer]
-                                        ; Hide from the user the fact that Thrift deserialization is impure.
-     (deserializer buffer))
-
-  #_(letfn [(deserialize-obj [object buffer]
-             (deserializer object buffer))]
-     (doto (.newInstance type)
-       (deserialize-obj buffer))))
+     (deserializer buffer)))
