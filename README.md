@@ -1,73 +1,56 @@
-# pail-thrift
+# pail-fressian
 
-[![Build Status](https://travis-ci.org/dcuddeback/pail-thrift.png?branch=master)](https://travis-ci.org/dcuddeback/pail-thrift)
-
-Serialization and partitioning strategies for using [Thrift](https://thrift.apache.org/) with
-[`clj-pail`](https://github.com/dcuddeback/clj-pail). Makes defining `PailStructure` classes for
-Thrift schemas easier.
+Serialization and partitioning strategies for using [`data.Fressian`](https://github.com/clojure/data.fressian) with
+[`clj-pail`](https://github.com/dcuddeback/clj-pail).  This library is modeled after [`pail-thrift`](https://github.com/dcuddeback/clj-pail)
+which it shares many commonalities.
 
 ## Usage
 
-Add `pail-thrift` to your project's dependencies. If you're using Leiningen, your `project.clj`
+Add `pail-fressian` to your project's dependencies. If you're using Leiningen, your `project.clj`
 should look something like this:
 
 ~~~clojure
 (defproject ...
-  :dependencies [[pail-thrift VERSION]])
+  :dependencies [[pail-fressian VERSION]])
 ~~~
 
-Where `VERSION` is the latest version on [Clojars](https://clojars.org/pail-thrift).
+Where `VERSION` is the latest version on [Clojars](https://clojars.org/pail-fressian).
 
 ### Defining a `PailStructure`
 
-`PailStructure` classes are defined with the `gen-structure` macro from `clj-pail`. `pail-thrift`
+`PailStructure` classes are defined with the `gen-structure` macro from `clj-pail`. `pail-fressian`
 provides serializers and partitioners that can be used with the `gen-structure` macro.
 
 ~~~clojure
 (ns example.pail
   (:require [clj-pail.structure :refer [gen-structure]]
-            [pail-thrift.serializer :as s]
-            [pail-thrift.partitioner :as p])
-  (:import (example.thrift MyUnion))
+            [pail-fressian.serializer :as s]
+            [pail-fressian.partitioner :as p])
   (:gen-class))
 
 (gen-structure example.pail.PailStructure
-               :type MyUnion
-               :serializer (s/thrift-serializer MyUnion)
-               :partitioner (p/union-partitioner MyUnion))
+               :serializer (s/fressian-serializer)
+               :partitioner (p/fressian-partitioner))
 ~~~
 
-In the above example, we define a `PailStructure` that serializes the `example.thrift.MyUnion` type
-using the default Thrift serialization protocol. The `PailStructure` will also be vertically
+In the above example, we define a `PailStructure` that can serialize any native data type using
+Fressian read and write. The `PailStructure` will also be vertically
 partitioned by the active field of each union.
-
-#### Controlling the Serialization Protocol
-
-The previous example uses the default Thrift serialization protocol. The protocol can be specified
-as an additional argument to the `thrift-serializer` function. The protocols are defined in
-[`clj-thrift`](https://github.com/dcuddeback/clj-thrift):
-
-~~~clojure
-(require '[clj-thrift.protocol.factory :as protocol])
-
-(s/thrift-serializer MyUnion (protocol/compact))
-~~~
 
 #### Vertical Partitioning
 
 A `PailStructure` is vertically partitioned according to the partitioner supplied as the
-`:partitioner` keyword argument of `gen-structure`. `pail-thrift` provides generic partitioners, but
-you may want the partitioner to be specific to your application. For this reason, the generalized
-partitioners are designed to be composed by application-specific ones.
+`:partitioner` keyword argument of `gen-structure`. `pail-fressian` provides somewhat generic partitioners, but
+you will most likely  want the partitioner to be specific to your application.
 
 Generalized partitioners are defined in
-[`pail-thrift.partitioner`](src/clojure/pail_thrift/partitioner.clj). Currently, there are 4 partitioners.
-Two that use field names, two that use field id's. Two of which that read one level down into any field ending
-in 'property' and containing a union to create a second level of partitioning.
+[`pail-fressian.partitioner`](src/clojure/pail_fressian/partitioner.clj). Currently, there are 2 partitioners.
+One uses the first property name of the data object. The other uses the type name of the data object, while also
+looking specifically for anything ending in [Pp]roperty, to look for a possible second level of partitioning.
 
 
 ## License
 
-Copyright © 2013 David Cuddeback
+Copyright © 2014 Eric Gebhart
 
 Distributed under the [MIT License](LICENSE).
