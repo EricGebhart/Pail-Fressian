@@ -27,5 +27,7 @@
                    :prep-tasks ["javac"]}
              }
 
+  :repositories {"sonatype-oss-public" "https://oss.sonatype.org/content/groups/public/"}
+
   :deploy-repositories [["releases" {:url "https://clojars.org/repo" :username :gpg :password :gpg}]
                         ["snapshots" {:url "https://clojars.org/repo" :username :gpg :password :gpg}]])
