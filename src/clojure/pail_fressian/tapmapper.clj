@@ -6,7 +6,6 @@
 ;   [ :location ["property" "location"]]
 ;
 ;
-
 ; Fressian taps - returns crap. because Fressian objects don't have a type we can use.
 (defn fressian-taps
   "Fressian tap mapper that does nothing"
