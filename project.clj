@@ -1,4 +1,4 @@
-(defproject pail-fressian "0.1.1-SNAPSHOT"
+(defproject pail-fressian "0.1.2"
   :description "Serialization and partitioning strategies for using Fressian with clj-pail."
   :url "https://github.com/EricGebhart/pail-fressian"
   :license {:name "MIT License"
@@ -11,7 +11,7 @@
   :dependencies [[org.clojure/clojure "1.5.1"]
                  [org.apache.hadoop/hadoop-core "1.2.0" ]
                  [cascalog "2.0.0" ]
-                 [clj-pail-tap "0.1.0-SNAPSHOT"]
+                 [clj-pail-tap "0.1.1"]
                  [byte-streams "0.1.7"]
                  [pail-cascalog "0.1.0"]
                  [org.clojure/data.fressian "0.2.0"]]
