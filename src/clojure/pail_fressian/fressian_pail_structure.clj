@@ -10,5 +10,5 @@
                :serializer (s/fressian-serializer)
                ;:partitioner (p/fressian-partitioner)
                :partitioner (p/fressian-property-partitioner)
-               :tapmapper   (t/null-tap-mapper)
+               :tapmapper   (t/null-tapmapper)
                :property-path-generator (t/null-path-generator))
